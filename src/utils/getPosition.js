@@ -14,7 +14,7 @@
  * - `newState` {Object}
  * - `position` {Object} {left: {Number}, top: {Number}}
  */
-export default function (e, target, node, place, desiredPlace, effect, offset) {
+export default function (e, target, node, place, desiredPlace, effect, offset, outsidePlace) {
   const {
     width: tipWidth,
     height: tipHeight
@@ -91,7 +91,7 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
     newPlace = desiredPlace
   } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
     isNewState = true
-    newPlace = insideList[0]
+    newPlace = outsidePlace || insideList[0]
   }
 
   if (isNewState) {

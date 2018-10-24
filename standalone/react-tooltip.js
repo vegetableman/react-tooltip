@@ -10512,7 +10512,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var _props2 = this.props,
           id = _props2.id,
-          globalEventOff = _props2.globalEventOff;
+          globalEventOff = _props2.globalEventOff,
+          isCapture = _props2.isCapture;
 
       var targetArray = this.getTargetArray(id);
 
@@ -10539,7 +10540,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       // Global event to hide tooltip
       if (globalEventOff) {
         window.removeEventListener(globalEventOff, this.hideTooltip);
-        window.addEventListener(globalEventOff, this.hideTooltip, false);
+        window.addEventListener(globalEventOff, this.hideTooltip, isCapture);
       }
 
       // Track removal of targetArray elements from DOM
@@ -10648,7 +10649,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top';
       var effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget);
       var offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {};
-      var result = (0, _getPosition2.default)(e, e.currentTarget, _reactDom2.default.findDOMNode(this), desiredPlace, desiredPlace, effect, offset);
+      var result = (0, _getPosition2.default)(e, e.currentTarget, _reactDom2.default.findDOMNode(this), desiredPlace, desiredPlace, effect, offset, this.props.outsidePlace);
       var place = result.isNewState ? result.newState.place : desiredPlace;
 
       // To prevent previously created timers from triggering
@@ -10861,7 +10862,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           offset = _state3.offset;
 
       var node = _reactDom2.default.findDOMNode(this);
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, desiredPlace, effect, offset);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, desiredPlace, effect, offset, this.props.outsidePlace);
 
       if (result.isNewState) {
         // Switch to reverse placement
@@ -10936,7 +10937,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           }
         }, ariaProps, {
           'data-id': 'tooltip',
-          dangerouslySetInnerHTML: { __html: (0, _sanitizeHtmlReact2.default)(placeholder) } }));
+          dangerouslySetInnerHTML: { __html: (0, _sanitizeHtmlReact2.default)(placeholder, this.props.sanitizeHtmlOptions) } }));
       } else {
         return _react2.default.createElement(
           Wrapper,
@@ -10957,6 +10958,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 }(_react2.default.Component), _class2.propTypes = {
   children: _propTypes2.default.any,
   place: _propTypes2.default.string,
+  outsidePlace: _propTypes2.default.string,
   type: _propTypes2.default.string,
   effect: _propTypes2.default.string,
   offset: _propTypes2.default.object,
@@ -10981,7 +10983,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   disable: _propTypes2.default.bool,
   scrollHide: _propTypes2.default.bool,
   resizeHide: _propTypes2.default.bool,
-  wrapper: _propTypes2.default.string
+  wrapper: _propTypes2.default.string,
+  sanitizeHtmlOptions: _propTypes2.default.any
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,
@@ -11035,7 +11038,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, desiredPlace, effect, offset) {
+exports.default = function (e, target, node, place, desiredPlace, effect, offset, outsidePlace) {
   var _getDimensions = getDimensions(node),
       tipWidth = _getDimensions.width,
       tipHeight = _getDimensions.height;
@@ -11132,7 +11135,7 @@ exports.default = function (e, target, node, place, desiredPlace, effect, offset
     newPlace = desiredPlace;
   } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
     isNewState = true;
-    newPlace = insideList[0];
+    newPlace = outsidePlace || insideList[0];
   }
 
   if (isNewState) {
