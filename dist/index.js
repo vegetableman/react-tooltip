@@ -208,10 +208,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function getTargetArray(id) {
       var targetArray = void 0;
       if (!id) {
-        targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
+        targetArray = document.querySelector('.vandal-root').shadowRoot.querySelectorAll('[data-tip]:not([data-for])');
       } else {
         var escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-        targetArray = document.querySelectorAll('[data-tip][data-for="' + escaped + '"]');
+        targetArray = document.querySelector('.vandal-root').shadowRoot.querySelectorAll('[data-tip][data-for="' + escaped + '"]');
       }
       // targetArray is a NodeList, convert it to a real array
       return (0, _nodeListToArray2.default)(targetArray);
