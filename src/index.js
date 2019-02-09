@@ -495,7 +495,11 @@ class ReactTooltip extends React.Component {
    */
   setStyleHeader () {
     const head = document.getElementsByTagName('head')[0]
-    if (!head.querySelector('style[id="react-tooltip"]')) {
+    let el = head
+    if (!el) {
+      el = document.body
+    }
+    if (!el.querySelector('style[id="react-tooltip"]')) {
       let tag = document.createElement('style')
       tag.id = 'react-tooltip'
       tag.innerHTML = cssStyle
@@ -504,7 +508,7 @@ class ReactTooltip extends React.Component {
         tag.setAttribute('nonce', __webpack_nonce__)
       }
       /* eslint-enable */
-      head.insertBefore(tag, head.firstChild)
+      el.insertBefore(tag, el.firstChild)
     }
   }
 

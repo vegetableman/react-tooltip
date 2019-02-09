@@ -10884,7 +10884,11 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'setStyleHeader',
     value: function setStyleHeader() {
       var head = document.getElementsByTagName('head')[0];
-      if (!head.querySelector('style[id="react-tooltip"]')) {
+      var el = head;
+      if (!el) {
+        el = document.body;
+      }
+      if (!el.querySelector('style[id="react-tooltip"]')) {
         var tag = document.createElement('style');
         tag.id = 'react-tooltip';
         tag.innerHTML = _style2.default;
@@ -10893,7 +10897,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           tag.setAttribute('nonce', __webpack_nonce__);
         }
         /* eslint-enable */
-        head.insertBefore(tag, head.firstChild);
+        el.insertBefore(tag, el.firstChild);
       }
     }
 
